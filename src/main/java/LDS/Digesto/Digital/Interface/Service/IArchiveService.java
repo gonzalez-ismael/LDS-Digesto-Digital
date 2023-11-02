@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Esta interfaz define un servicio que gestiona operaciones relacionadas con la entidad "Archive." Proporciona métodos
- * para recuperar archivos, guardar nuevos archivos, eliminar archivos y buscar archivos por su identificador.
+ * para recuperar, guardar nuevos, eliminar y buscar archivos por su identificador.
  *
  *
  * @author GONZALEZ ESPADA, José Ismael

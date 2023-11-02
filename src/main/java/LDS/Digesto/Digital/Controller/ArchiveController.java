@@ -1,7 +1,10 @@
 package LDS.Digesto.Digital.Controller;
 
 import LDS.Digesto.Digital.Entity.Archive;
+import LDS.Digesto.Digital.Entity.Destinatario;
 import LDS.Digesto.Digital.Entity.NivelConfidencialidad;
+import LDS.Digesto.Digital.Entity.PalabraClave;
+import LDS.Digesto.Digital.Entity.Reparticion;
 import LDS.Digesto.Digital.Entity.Vigencia;
 import LDS.Digesto.Digital.Interface.Service.IArchiveService;
 import java.util.List;
@@ -48,20 +51,20 @@ public class ArchiveController {
         return "El archivo fue eliminado correctamente.";
     }
 
-    @PutMapping("/archivo/eliminar/{id}")
+    @PutMapping("/archivo/modificar/{id}")
     public Archive editArchive(@PathVariable Integer id,
-            @RequestParam("id2") Integer nuevoId2,
+            @RequestParam("id2") String nuevoId2,
             @RequestParam("titulo") String nuevoTitulo,
             @RequestParam("fecha_emision") java.time.LocalDate nuevaFechaEmision,
             @RequestParam("fecha_publicacion") java.time.LocalDate nuevaFechaPublicacion,
             @RequestParam("descripcion") String nuevaDescripcion,
-            @RequestParam("reparticion") String nuevaReparticion,
             @RequestParam("taxonomia") String nuevaTaxonomia,
-            @RequestParam("palabras_claves") String[] nuevasPalabrasClaves,
+            @RequestParam("url") String nuevaUrl,
+            @RequestParam("reparticion") Reparticion nuevaReparticion,
             @RequestParam("vigencia") Vigencia nuevaVigencia,
-            @RequestParam("niveles_confidencialidad") NivelConfidencialidad nuevoNivelConfidencialidad,
-            @RequestParam("destinatarios") String[] nuevosDestinatarios,
-            @RequestParam("url") String nuevaUrl) {
+            @RequestParam("nivelConfidencialidad") NivelConfidencialidad nuevoNivelConfidencialidad,
+            @RequestParam("palabrasClaves") List<PalabraClave> nuevasPalabrasClaves,
+            @RequestParam("destinatarios") List<Destinatario> nuevosDestinatarios) {
         Archive archivo = iArchiveServi.findArchive(id);
 
         // Establecer los demás atributos de la entidad Archive con los nuevos valores
@@ -70,13 +73,13 @@ public class ArchiveController {
         archivo.setFecha_emision(nuevaFechaEmision);
         archivo.setFecha_publicacion(nuevaFechaPublicacion);
         archivo.setDescripcion(nuevaDescripcion);
-        archivo.setReparticion(nuevaReparticion);
         archivo.setTaxonomia(nuevaTaxonomia);
-        archivo.setPalabras_claves(nuevasPalabrasClaves);
-        archivo.setVigencia(nuevaVigencia);
-        archivo.setNiveles_confidencialidad(nuevoNivelConfidencialidad);
-        archivo.setDestinatarios(nuevosDestinatarios);
         archivo.setUrl(nuevaUrl);
+        archivo.setReparticion(nuevaReparticion);
+        archivo.setVigencia(nuevaVigencia);
+        archivo.setNivelConfidencialidad(nuevoNivelConfidencialidad);
+        archivo.setPalabrasClaves(nuevasPalabrasClaves);
+        archivo.setDestinatarios(nuevosDestinatarios);
 
         iArchiveServi.saveArchive(archivo);
         return archivo;

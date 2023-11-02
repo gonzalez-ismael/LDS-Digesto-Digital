@@ -1,31 +1,33 @@
 package LDS.Digesto.Digital.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Esta clase define los posibles estados para la variable "NivelConfidencialidad" en un archivo.
- * Puede contener valores como "Público", "Privado", entre otros.
+ * Esta clase define los posibles estados para la variable "NivelConfidencialidad" en un archivo. Puede contener valores como "Público", "Privado", entre otros.
  *
  * @author GONZALEZ ESPADA, José Ismael
  */
+@Entity
+@Getter
+@Setter
 public class NivelConfidencialidad {
-    private final List<String> estados = new ArrayList<>();
 
-    public NivelConfidencialidad() {
-        estados.add("Vigente");
-        estados.add("Obsoleto");
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public void agregarEstado(String nuevoEstado) {
-        estados.add(nuevoEstado);
-    }
+    @NotNull
+    private String nivelConfidencialidad;
 
-    public void eliminarEstado(String estado) {
-        estados.remove(estado);
-    }
-
-    public List<String> getEstados() {
-        return estados;
-    }
+    @OneToMany(mappedBy = "nivelConfidencialidad")
+    private Set<Archive> archivos = new HashSet<>();
 }
