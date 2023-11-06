@@ -3,15 +3,16 @@ package LDS.Digesto.Digital.Controller;
 import LDS.Digesto.Digital.Entity.Reparticion;
 import LDS.Digesto.Digital.Interface.Service.IReparticionService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador que gestiona las operaciones relacionadas con reparticiones.
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author GONZALEZ ESPADA, José Ismael
  */
-@Controller
+@RestController
 public class ReparticionController {
     @Autowired IReparticionService iReparticionServi;
     
@@ -33,26 +34,26 @@ public class ReparticionController {
     }
 
     @PostMapping("/reparticion/crear")
-    public String createReparticion(@RequestBody Reparticion reparticion) {
+    public HttpStatus createReparticion(@RequestBody Reparticion reparticion) {
         iReparticionServi.saveReparticion(reparticion);
-        return "La reparticion fue creada correctamente.";
+        return HttpStatus.CREATED;
     }
 
     @DeleteMapping("/reparticion/eliminar/{id}")
-    public String deleteReparticion(@PathVariable Integer id) {
+    public HttpStatus deleteReparticion(@PathVariable Integer id) {
         iReparticionServi.deleteReparticion(id);
-        return "La reparticion fue eliminada correctamente.";
+        return HttpStatus.NO_CONTENT;
     }
     
     @PutMapping("/reparticion/modificar/{id}")
-    public Reparticion editReparticion(@PathVariable Integer id,
-            @RequestParam("reparticion") String nuevaReparticion) {
+    public HttpStatus editReparticion(@PathVariable Integer id,
+            @RequestBody Map<String, String> requestBody) {
         
+        String nuevaReparticion = requestBody.get("reparticion");
         Reparticion reparticion = iReparticionServi.findReparticion(id);
-        
         reparticion.setReparticion(nuevaReparticion);
 
         iReparticionServi.saveReparticion(reparticion);
-        return reparticion;
+        return HttpStatus.OK;
     }
 }

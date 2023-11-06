@@ -3,15 +3,16 @@ package LDS.Digesto.Digital.Controller;
 import LDS.Digesto.Digital.Entity.NivelConfidencialidad;
 import LDS.Digesto.Digital.Interface.Service.INivelConfidencialidadService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador que gestiona las operaciones relacionadas con los niveles de confidencialidad.
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author GONZALEZ ESPADA, José Ismael
  */
-@Controller
+@RestController
 public class NivelConfidencialidadController {
     @Autowired INivelConfidencialidadService iNivelConfiServi;
     
@@ -33,26 +34,26 @@ public class NivelConfidencialidadController {
     }
 
     @PostMapping("/nivel-confidencialidad/crear")
-    public String createNivelConfidencialidad(@RequestBody NivelConfidencialidad nivelConfidencialidad) {
+    public HttpStatus createNivelConfidencialidad(@RequestBody NivelConfidencialidad nivelConfidencialidad) {
         iNivelConfiServi.saveNivelConfidencialidad(nivelConfidencialidad);
-        return "El nivel de confidencialidad fue creado correctamente.";
+        return HttpStatus.CREATED;
     }
 
     @DeleteMapping("/nivel-confidencialidad/eliminar/{id}")
-    public String deleteNivelConfidencialidad(@PathVariable Integer id) {
+    public HttpStatus deleteNivelConfidencialidad(@PathVariable Integer id) {
         iNivelConfiServi.deleteNivelConfidencialidad(id);
-        return "El nivel de confidencialidad fue eliminado correctamente.";
+        return HttpStatus.NO_CONTENT;
     }
     
     @PutMapping("/nivel-confidencialidad/modificar/{id}")
-    public NivelConfidencialidad editNivelConfidencialidad(@PathVariable Integer id,
-            @RequestParam("nivelConfidencialidad") String nuevoNivelConfidencialidad) {
+    public HttpStatus editNivelConfidencialidad(@PathVariable Integer id,
+            @RequestBody Map<String, String> requestBody) {
         
+        String nuevoNivelConfidencialidad = requestBody.get("nivelConfidencialidad");
         NivelConfidencialidad nivelConfidencialidad = iNivelConfiServi.findNivelConfidencialidad(id);
-        
         nivelConfidencialidad.setNivelConfidencialidad(nuevoNivelConfidencialidad);
 
         iNivelConfiServi.saveNivelConfidencialidad(nivelConfidencialidad);
-        return nivelConfidencialidad;
+        return HttpStatus.OK;
     }
 }

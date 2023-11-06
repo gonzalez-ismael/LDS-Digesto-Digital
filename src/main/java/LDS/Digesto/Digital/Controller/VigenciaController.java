@@ -3,15 +3,17 @@ package LDS.Digesto.Digital.Controller;
 import LDS.Digesto.Digital.Entity.Vigencia;
 import LDS.Digesto.Digital.Interface.Service.IVigenciaService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  * Controlador que gestiona las operaciones relacionadas con vigencias.
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author GONZALEZ ESPADA, José Ismael
  */
-@Controller
+@RestController
 public class VigenciaController {
     @Autowired IVigenciaService iVigenciaServi;
     
@@ -33,26 +35,26 @@ public class VigenciaController {
     }
 
     @PostMapping("/vigencia/crear")
-    public String createVigencia(@RequestBody Vigencia vigencia) {
+    public HttpStatus createVigencia(@RequestBody Vigencia vigencia) {
         iVigenciaServi.saveVigencia(vigencia);
-        return "La vigencia fue creada correctamente.";
+        return HttpStatus.CREATED; //201
     }
 
     @DeleteMapping("/vigencia/eliminar/{id}")
-    public String deleteVigencia(@PathVariable Integer id) {
+    public HttpStatus deleteVigencia(@PathVariable Integer id) {
         iVigenciaServi.deleteVigencia(id);
-        return "La vigencia fue eliminada correctamente.";
+        return HttpStatus.NO_CONTENT; //204 
     }
     
     @PutMapping("/vigencia/modificar/{id}")
-    public Vigencia editVigencia(@PathVariable Integer id,
-            @RequestParam("vigencia") String nuevaVigencia) {
+    public HttpStatus editVigencia(@PathVariable Integer id,
+            @RequestBody Map<String, String> requestBody) {
         
+        String nuevaVigencia = requestBody.get("vigencia");
         Vigencia vigencia = iVigenciaServi.findVigencia(id);
-        
         vigencia.setVigencia(nuevaVigencia);
 
         iVigenciaServi.saveVigencia(vigencia);
-        return vigencia;
+        return HttpStatus.OK; //200
     }
 }
