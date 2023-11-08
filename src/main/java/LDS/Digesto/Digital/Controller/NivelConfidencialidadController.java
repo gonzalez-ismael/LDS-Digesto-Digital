@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NivelConfidencialidadController {
     @Autowired INivelConfidencialidadService iNivelConfiServi;
     
-    @GetMapping("/nivel-confidencialidad/traer")
+    @GetMapping("/niveles-confidencialidad/traer")
     public List<NivelConfidencialidad> getNivelConfidencialidad() {
         return iNivelConfiServi.getNivelConfidencialidad();
     }

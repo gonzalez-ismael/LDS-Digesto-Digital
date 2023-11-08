@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VigenciaController {
     @Autowired IVigenciaService iVigenciaServi;
     
-    @GetMapping("/vigencia/traer")
+    @GetMapping("/vigencias/traer")
     public List<Vigencia> getVigencia() {
         return iVigenciaServi.getVigencia();
     }

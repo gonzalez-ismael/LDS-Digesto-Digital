@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DestinatarioController {
     @Autowired IDestinatarioService iDestinatarioServi;
     
-    @GetMapping("/destinatario/traer")
+    @GetMapping("/destinatarios/traer")
     public List<Destinatario> getDestinatarios() {
         return iDestinatarioServi.getDestinatarios();
     }

@@ -32,13 +32,13 @@ public class PalabraClaveController {
         return iPalabraServi.getPalabrasClaves();
     }
 
-    @PostMapping("/palabras-claves/crear")
+    @PostMapping("/palabra-clave/crear")
     public HttpStatus createPalabrasClaves(@RequestBody PalabraClave palabra) {
         iPalabraServi.savePalabraClave(palabra);
         return HttpStatus.CREATED;
     }
 
-    @DeleteMapping("/palabras-claves/eliminar/{id}")
+    @DeleteMapping("/palabra-clave/eliminar/{id}")
     public HttpStatus deletePalabraClave(@PathVariable Integer id) {
         iPalabraServi.deletePalabraClave(id);
         return HttpStatus.NO_CONTENT;

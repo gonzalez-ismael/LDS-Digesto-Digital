@@ -32,7 +32,7 @@ public class ArchiveController {
     @Autowired
     IArchiveService iArchiveServi;
 
-    @GetMapping("/archivo/traer")
+    @GetMapping("/archivos/traer")
     public List<Archive> getPersonas() {
         return iArchiveServi.getArchive();
     }

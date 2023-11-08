@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReparticionController {
     @Autowired IReparticionService iReparticionServi;
     
-    @GetMapping("/reparticion/traer")
+    @GetMapping("/reparticiones/traer")
     public List<Reparticion> getReparticion() {
         return iReparticionServi.getReparticion();
     }
