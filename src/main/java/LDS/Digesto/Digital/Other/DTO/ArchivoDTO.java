@@ -1,10 +1,5 @@
 package LDS.Digesto.Digital.Other.DTO;
 
-import LDS.Digesto.Digital.Entity.Destinatario;
-import LDS.Digesto.Digital.Entity.NivelConfidencialidad;
-import LDS.Digesto.Digital.Entity.PalabraClave;
-import LDS.Digesto.Digital.Entity.Reparticion;
-import LDS.Digesto.Digital.Entity.Vigencia;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -22,13 +17,13 @@ public class ArchivoDTO {
     private String id2;
     private String titulo;
     private java.time.LocalDate fecha_emision;
-    private java.time.LocalDate fecha_publicacion;
+    private String fecha_publicacion;
     private String descripcion;
     private String taxonomia;
     private String url;
-    private Reparticion reparticion;
-    private Vigencia vigencia;
-    private NivelConfidencialidad nivelConfidencialidad;
-    private List<PalabraClave> palabrasClaves = new ArrayList<>();
-    private List<Destinatario> destinatarios = new ArrayList<>();
+    private Integer reparticion;
+    private Integer vigencia;
+    private Integer nivelConfidencialidad;
+    private List<Integer> palabrasClaves = new ArrayList<>();
+    private List<Integer> destinatarios = new ArrayList<>();
 }

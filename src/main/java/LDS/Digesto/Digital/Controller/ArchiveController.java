@@ -7,7 +7,16 @@ import LDS.Digesto.Digital.Entity.PalabraClave;
 import LDS.Digesto.Digital.Entity.Reparticion;
 import LDS.Digesto.Digital.Entity.Vigencia;
 import LDS.Digesto.Digital.Interface.Service.IArchiveService;
+import LDS.Digesto.Digital.Interface.Service.IDestinatarioService;
+import LDS.Digesto.Digital.Interface.Service.INivelConfidencialidadService;
+import LDS.Digesto.Digital.Interface.Service.IPalabraClaveService;
+import LDS.Digesto.Digital.Interface.Service.IReparticionService;
+import LDS.Digesto.Digital.Interface.Service.IVigenciaService;
 import LDS.Digesto.Digital.Other.DTO.ArchivoDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +24,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,14 +39,61 @@ public class ArchiveController {
 
     @Autowired
     IArchiveService iArchiveServi;
+    @Autowired
+    IReparticionService iRepaServi;
+    @Autowired
+    IVigenciaService iVigeServi;
+    @Autowired
+    INivelConfidencialidadService iConfiServi;
+    @Autowired
+    IPalabraClaveService iClaveServi;
+    @Autowired
+    IDestinatarioService iDestiServi;
 
     @GetMapping("/archivos/traer")
     public List<Archive> getPersonas() {
         return iArchiveServi.getArchive();
     }
 
+    @JsonIgnore
     @PostMapping("/archivo/crear")
-    public HttpStatus createArchive(@RequestBody Archive archivo) {
+    public HttpStatus createArchive(@RequestBody ArchivoDTO miDTO) {
+
+        String nuevoId2 = miDTO.getId2();
+        String nuevoTitulo = miDTO.getTitulo();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate nuevaFechaEmision = miDTO.getFecha_emision();
+        LocalDate nuevaFechaPublicacion = LocalDate.parse(miDTO.getFecha_publicacion(), formatter);                
+        String nuevaDescripcion = miDTO.getDescripcion();
+        String nuevaTaxonomia = miDTO.getTaxonomia();
+        String nuevaUrl = miDTO.getUrl();
+        Reparticion nuevaReparticion = iRepaServi.findReparticion(miDTO.getReparticion());
+        Vigencia nuevaVigencia = iVigeServi.findVigencia(miDTO.getVigencia());
+        NivelConfidencialidad nuevoNivelConfidencialidad = iConfiServi.findNivelConfidencialidad(miDTO.getNivelConfidencialidad());
+        List<PalabraClave> nuevasPalabrasClaves = new ArrayList();
+        for (Integer e : miDTO.getPalabrasClaves()) {
+            nuevasPalabrasClaves.add(iClaveServi.findPalabraClave(e));
+        }
+        List<Destinatario> nuevosDestinatarios = new ArrayList<>();
+        for (Integer idDestinatario : miDTO.getDestinatarios()) {
+            nuevosDestinatarios.add(iDestiServi.findDestinatario(idDestinatario));
+        }
+
+        Archive archivo = new Archive();
+
+        archivo.setId2(nuevoId2);
+        archivo.setTitulo(nuevoTitulo);
+        archivo.setFecha_emision(nuevaFechaEmision);
+        archivo.setFecha_publicacion(nuevaFechaPublicacion);
+        archivo.setDescripcion(nuevaDescripcion);
+        archivo.setTaxonomia(nuevaTaxonomia);
+        archivo.setUrl(nuevaUrl);
+        archivo.setReparticion(nuevaReparticion);
+        archivo.setVigencia(nuevaVigencia);
+        archivo.setNivelConfidencialidad(nuevoNivelConfidencialidad);
+        archivo.setPalabrasClaves(nuevasPalabrasClaves);
+        archivo.setDestinatarios(nuevosDestinatarios);
+
         iArchiveServi.saveArchive(archivo);
         return HttpStatus.CREATED;
     }
@@ -49,9 +104,8 @@ public class ArchiveController {
         return HttpStatus.NO_CONTENT;
     }
 
-    @PutMapping("/archivo/modificar/{id}")
-    public HttpStatus editArchive(@PathVariable Integer id,
-            @RequestBody ArchivoDTO miDTO) {
+    /*@PutMapping("/archivo/modificar/{id}")
+    public HttpStatus editArchive(@PathVariable Integer id, @RequestBody ArchivoDTO miDTO) {
         
         String nuevoId2 = miDTO.getId2();
         String nuevoTitulo = miDTO.getTitulo();
@@ -84,5 +138,5 @@ public class ArchiveController {
 
         iArchiveServi.saveArchive(archivo);
         return HttpStatus.OK;
-    }
+    }*/
 }
